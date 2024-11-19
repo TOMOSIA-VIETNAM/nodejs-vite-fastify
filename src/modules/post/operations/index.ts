@@ -1,0 +1,5 @@
+export * from './create-post.operation'
+export * from './get-post.operation'
+export * from './get-posts.operation'
+export * from './update-post.operation'
+export * from './delete-post.operation'

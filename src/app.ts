@@ -1,5 +1,5 @@
-import Fastify from 'fastify'
-import type { FastifyServerOptions, FastifyInstance } from 'fastify'
+import Fastify, { FastifyInstance } from 'fastify'
+import type { FastifyServerOptions } from '@fastify/type-provider-json-schema-to-ts'
 import swagger from '@fastify/swagger'
 import swaggerUi from '@fastify/swagger-ui'
 import cors from '@fastify/cors'
@@ -9,7 +9,7 @@ import jwt from '@fastify/jwt'
 
 import { env } from './config/environment'
 import { errorHandler } from './shared/middlewares/error-handler'
-import { setupRoutes } from './modules'
+import { setupRoutes } from './modules/setup-routes'
 import { swaggerOptions, swaggerUiOptions } from './config/swagger'
 
 export default async function buildApp(opts: FastifyServerOptions = {}): Promise<FastifyInstance> {
@@ -36,7 +36,7 @@ export default async function buildApp(opts: FastifyServerOptions = {}): Promise
   app.setErrorHandler(errorHandler)
 
   // Setup routes
-  setupRoutes(app)
+  await setupRoutes(app)
 
   return app
 }
