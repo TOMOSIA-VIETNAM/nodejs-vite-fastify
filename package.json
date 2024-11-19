@@ -11,7 +11,11 @@
     "start": "pnpm build && node build/server.mjs",
     "test": "vitest run",
     "test:ui": "vitest --ui",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "db:migration": "prisma generate --schema=./prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=./prisma/schema.prisma",
+    "db:studio": "prisma studio",
+    "db:push": "prisma db push"
   },
   "keywords": [
     "fastify",

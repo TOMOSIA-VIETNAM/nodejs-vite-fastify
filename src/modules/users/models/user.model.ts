@@ -1,39 +1,32 @@
-import { prisma } from '../../../lib/prisma'
-import { CreateUserDTO, UpdateUserDTO } from '../interfaces/user.interface'
+import { readerClient } from '../../../lib/prisma'
+import type { User } from '../interfaces/user.interface'
 
 export class UserModel {
-  async create(data: CreateUserDTO) {
-    return prisma.user.create({
-      data
-    })
-  }
-
-  async findById(id: number) {
-    return prisma.user.findUnique({
+  async findById(id: number): Promise<User | null> {
+    return readerClient.user.findUnique({
       where: { id }
     })
   }
 
-  async findByEmail(email: string) {
-    return prisma.user.findUnique({
+  async findByEmail(email: string): Promise<User | null> {
+    return readerClient.user.findUnique({
       where: { email }
     })
   }
 
-  async findAll() {
-    return prisma.user.findMany()
+  async findAll(): Promise<User[]> {
+    return readerClient.user.findMany()
   }
 
-  async update(id: number, data: UpdateUserDTO) {
-    return prisma.user.update({
-      where: { id },
-      data
-    })
+  async create(): Promise<never> {
+    throw new Error('Create operation not allowed on reader database')
   }
 
-  async delete(id: number) {
-    return prisma.user.delete({
-      where: { id }
-    })
+  async update(): Promise<never> {
+    throw new Error('Update operation not allowed on reader database')
+  }
+
+  async delete(): Promise<never> {
+    throw new Error('Delete operation not allowed on reader database')
   }
 }
