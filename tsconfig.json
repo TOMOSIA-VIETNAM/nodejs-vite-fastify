@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "module": "esnext",
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
@@ -13,7 +13,9 @@
     },
     "typeRoots": ["./node_modules/@types", "./src/shared/types"],
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "vite.config.ts"],
   "exclude": ["node_modules"]

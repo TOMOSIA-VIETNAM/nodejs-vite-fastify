@@ -2,7 +2,11 @@
 import { defineConfig } from 'vite'
 import { VitePluginNode } from 'vite-plugin-node'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import * as path from 'path'
+import { fileURLToPath } from 'url'
+import { dirname, resolve } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default defineConfig({
   server: {
@@ -19,7 +23,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': resolve(__dirname, './src')
     }
   }
 })
