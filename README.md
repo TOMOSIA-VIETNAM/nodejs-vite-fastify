@@ -37,6 +37,7 @@ Visit `http://localhost:3000` to see your server running.
 
 - [Getting Started](docs/getting-started.md) - First steps and installation
 - [Development Guide](docs/development.md) - Development workflow and tools
+- [Architecture](docs/architecture.md) - Project architecture
 - [Database Guide](docs/database.md) - Database setup and migrations
 - [Testing Guide](docs/testing.md) - How to write and run tests
 - [Deployment Guide](docs/deployment.md) - Production deployment instructions
