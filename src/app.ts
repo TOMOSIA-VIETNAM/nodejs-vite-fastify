@@ -8,7 +8,7 @@ import fastifyJwt from '@fastify/jwt'
 
 import { env } from './config/environment'
 import { errorHandler } from './shared/middlewares/error-handler'
-import { setupRoutes } from './modules/setup-routes'
+import { setupRoutes } from './modules'
 import { swaggerOptions, swaggerUiOptions } from './config/swagger'
 
 export default async function buildApp(opts: FastifyServerOptions = {}) {

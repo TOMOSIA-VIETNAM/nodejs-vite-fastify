@@ -1,9 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import '@fastify/jwt'
 
-declare module 'fastify' {
-  interface FastifyRequest {
-    jwtVerify: () => Promise<any>
+declare module '@fastify/jwt' {
+  interface FastifyJWT {
+    payload: { id: number; email: string }
+    user: {
+      id: number
+      email: string
+    }
   }
 }
 

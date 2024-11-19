@@ -6,10 +6,14 @@
     "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "module": "esnext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
+    "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
       "@/*": ["./src/*"]
-    }
-  }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/shared/types"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }
