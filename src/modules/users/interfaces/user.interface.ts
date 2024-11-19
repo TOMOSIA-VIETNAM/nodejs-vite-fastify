@@ -5,3 +5,13 @@ export interface User {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface CreateUserDTO {
+  email: string
+  name: string
+}
+
+export interface UpdateUserDTO {
+  email?: string
+  name?: string
+}
