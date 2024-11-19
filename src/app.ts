@@ -1,43 +1,35 @@
-import { fastify as Fastify, FastifyServerOptions } from 'fastify'
-import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
-import fastifyCors from '@fastify/cors'
-import fastifyHelmet from '@fastify/helmet'
-import fastifyRateLimit from '@fastify/rate-limit'
-import fastifyJwt from '@fastify/jwt'
+import Fastify from 'fastify'
+import type { FastifyServerOptions, FastifyInstance } from 'fastify'
+import swagger from '@fastify/swagger'
+import swaggerUi from '@fastify/swagger-ui'
+import cors from '@fastify/cors'
+import helmet from '@fastify/helmet'
+import rateLimit from '@fastify/rate-limit'
+import jwt from '@fastify/jwt'
 
 import { env } from './config/environment'
 import { errorHandler } from './shared/middlewares/error-handler'
 import { setupRoutes } from './modules'
 import { swaggerOptions, swaggerUiOptions } from './config/swagger'
 
-export default async function buildApp(opts: FastifyServerOptions = {}) {
-  const app = Fastify({
-    ...opts,
-    ajv: {
-      customOptions: {
-        removeAdditional: 'all',
-        coerceTypes: true,
-        useDefaults: true
-      }
-    }
-  })
+export default async function buildApp(opts: FastifyServerOptions = {}): Promise<FastifyInstance> {
+  const app = Fastify(opts)
 
   // Register plugins
-  await app.register(fastifyHelmet)
-  await app.register(fastifyCors)
-  await app.register(fastifyRateLimit, {
+  await app.register(helmet)
+  await app.register(cors)
+  await app.register(rateLimit, {
     max: env.RATE_LIMIT,
     timeWindow: env.RATE_LIMIT_TIMEWINDOW
   })
-  await app.register(fastifyJwt, {
+  await app.register(jwt, {
     secret: env.JWT_SECRET
   })
 
   // Register Swagger if not in production
   if (env.NODE_ENV !== 'production') {
-    await app.register(fastifySwagger, swaggerOptions)
-    await app.register(fastifySwaggerUi, swaggerUiOptions)
+    await app.register(swagger, swaggerOptions)
+    await app.register(swaggerUi, swaggerUiOptions)
   }
 
   // Setup error handler

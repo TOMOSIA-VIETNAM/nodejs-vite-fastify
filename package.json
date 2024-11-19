@@ -3,11 +3,12 @@
   "version": "0.0.6",
   "description": "Fastify boilerplate with Vite & Vitest",
   "main": "build/server.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build --outDir build --ssr src/server.ts",
     "format": "prettier --config .prettierrc \"src/**/*.{js,json,ts,css,scss,vue,html,md}\" --write",
-    "start": "yarn build && node build/server.mjs",
+    "start": "pnpm build && node build/server.mjs",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "coverage": "vitest --coverage"
@@ -23,35 +24,23 @@
   "author": "Emmanuel Salomon <emmanuel.salomon@gmail.com> (https://github.com/ManUtopiK)",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "env-schema": "^6.0.0",
-    "fastify": "^4.25.2",
-    "pino": "^9.4.0",
-    "pino-pretty": "^11.2.2",
-    "@fastify/swagger": "^8.12.0",
-    "@fastify/swagger-ui": "^2.0.1",
-    "@fastify/cors": "^8.4.1",
-    "@fastify/helmet": "^11.1.1",
-    "@fastify/rate-limit": "^8.0.3",
-    "@fastify/jwt": "^7.2.3",
-    "prisma": "^5.6.0",
-    "@prisma/client": "^5.6.0",
+    "@fastify/cors": "10.0.1",
+    "@fastify/helmet": "12.0.1",
+    "@fastify/jwt": "9.0.1",
+    "@fastify/rate-limit": "10.2.1",
+    "@fastify/swagger": "9.3.0",
+    "@fastify/swagger-ui": "5.1.0",
     "@sinclair/typebox": "^0.31.28",
+    "env-schema": "^5.2.0",
+    "fastify": "^5.1.0",
+    "pino": "^8.16.2",
+    "pino-pretty": "^10.3.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
-    "@types/fastify": "^4.0.0",
-    "@fastify/type-provider-json-schema-to-ts": "^2.2.2",
-    "@types/pino": "^7.0.5",
-    "@vitest/coverage-v8": "^1.1.3",
-    "@vitest/ui": "^1.1.3",
-    "@typescript-eslint/eslint-plugin": "^6.13.1",
-    "@typescript-eslint/parser": "^6.13.1",
-    "eslint": "^8.54.0",
-    "eslint-config-prettier": "^9.0.0",
-    "prettier": "^3.1.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.1.0",
+    "@types/node": "^20.10.6",
+    "@prisma/client": "^5.7.1",
+    "prisma": "^5.7.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
     "vite-plugin-node": "^3.1.0",
@@ -59,6 +48,6 @@
     "vitest": "^1.1.3"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=18.0.0"
   }
 }
