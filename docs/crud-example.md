@@ -164,96 +164,151 @@ export async function deleteUser(
 }
 ```
 
-## Testing the API
+## API Testing Commands
 
-Here are some example requests using cURL:
+### User Endpoints
 
+1. Create User
 ```bash
-# Create a user
-curl -X POST http://localhost:3000/users \
+curl -X POST http://localhost:3000/api/v1/users \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","name":"Test User"}'
+  -d '{
+    "email": "test@example.com",
+    "name": "Test User"
+  }' | json_pp
+```
 
-# Get all users
-curl http://localhost:3000/users
+2. Get All Users
+```bash
+curl http://localhost:3000/api/v1/users | json_pp
+```
 
-# Get specific user
-curl http://localhost:3000/users/1
+3. Get User by ID
+```bash
+curl http://localhost:3000/api/v1/users/1 | json_pp
+```
 
-# Update user
-curl -X PUT http://localhost:3000/users/1 \
+4. Update User
+```bash
+curl -X PATCH http://localhost:3000/api/v1/users/1 \
   -H "Content-Type: application/json" \
-  -d '{"name":"Updated Name"}'
-
-# Delete user
-curl -X DELETE http://localhost:3000/users/1
+  -d '{
+    "name": "Updated Name",
+    "email": "updated@example.com"
+  }' | json_pp
 ```
 
-## Integration with Main App
-
-Add to `src/modules/setup-routes.ts`:
-
-```typescript
-import { userRoutes } from './users/users.routes';
-import { userSchemas } from './users/users.schema';
-
-export async function setupRoutes(app: FastifyInstance) {
-  // Register schemas
-  for (const schema of userSchemas) {
-    app.addSchema(schema);
-  }
-
-  // Register routes
-  app.register(userRoutes, { prefix: '/users' });
-}
+5. Delete User
+```bash
+curl -X DELETE http://localhost:3000/api/v1/users/1
 ```
 
-## Testing
+### Post Endpoints
 
-Create `src/test/users.test.ts`:
-
-```typescript
-import { test, expect } from 'vitest';
-import { build } from './fastify';
-
-test('create user', async () => {
-  const app = await build();
-
-  const response = await app.inject({
-    method: 'POST',
-    url: '/users',
-    payload: {
-      email: 'test@example.com',
-      name: 'Test User'
-    }
-  });
-
-  expect(response.statusCode).toBe(201);
-  expect(JSON.parse(response.payload)).toMatchObject({
-    email: 'test@example.com',
-    name: 'Test User'
-  });
-});
+1. Create Post
+```bash
+curl -X POST http://localhost:3000/api/v1/posts \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Test Post",
+    "content": "This is a test post content",
+    "published": true,
+    "authorId": 1
+  }' | json_pp
 ```
 
-## Common Patterns and Best Practices
+2. Get All Posts
+```bash
+curl http://localhost:3000/api/v1/posts | json_pp
+```
 
-1. **Error Handling**
-   - Always return appropriate HTTP status codes
-   - Use consistent error response format
-   - Validate input data using schemas
+3. Get Post by ID
+```bash
+curl http://localhost:3000/api/v1/posts/1 | json_pp
+```
 
-2. **Database Operations**
-   - Use TypeORM repositories for database operations
-   - Implement proper error handling for database operations
-   - Use transactions for complex operations
+4. Update Post
+```bash
+curl -X PATCH http://localhost:3000/api/v1/posts/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Updated Title",
+    "content": "Updated content",
+    "published": true
+  }' | json_pp
+```
 
-3. **Testing**
-   - Test happy path and error cases
-   - Use proper test isolation
-   - Mock external dependencies
+5. Delete Post
+```bash
+curl -X DELETE http://localhost:3000/api/v1/posts/1
+```
 
-4. **Security**
-   - Validate and sanitize input
-   - Implement proper authentication/authorization
-   - Use parameterized queries (handled by TypeORM)
+## Error Cases Testing
+
+### User API Error Cases
+
+1. Create User with Duplicate Email
+```bash
+# First create a user
+curl -X POST http://localhost:3000/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "name": "Test User"
+  }' | json_pp
+
+# Try to create another user with same email
+curl -X POST http://localhost:3000/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "name": "Another User"
+  }' | json_pp
+```
+
+2. Get Non-existent User
+```bash
+curl -X GET http://localhost:3000/api/v1/users/999 | json_pp
+```
+
+### Post API Error Cases
+
+1. Create Post with Non-existent Author
+```bash
+curl -X POST http://localhost:3000/api/v1/posts \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Test Post",
+    "content": "This is a test post",
+    "published": true,
+    "authorId": 999
+  }' | json_pp
+```
+
+2. Update Non-existent Post
+```bash
+curl -X PATCH http://localhost:3000/api/v1/posts/999 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Updated Title"
+  }' | json_pp
+```
+
+3. Update Post with Non-existent Author
+```bash
+curl -X PATCH http://localhost:3000/api/v1/posts/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "authorId": 999
+  }' | json_pp
+```
+
+## Response Status Codes
+
+- 200: Success (GET, PATCH)
+- 201: Created (POST)
+- 204: No Content (DELETE)
+- 400: Bad Request
+- 404: Not Found
+- 409: Conflict (e.g., duplicate email)
+- 500: Internal Server Error

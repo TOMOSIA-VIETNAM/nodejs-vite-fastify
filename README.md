@@ -21,7 +21,6 @@ cp .env.example .env
 # Start development server
 pnpm dev
 ```
-
 Visit `http://localhost:3000` to see your server running.
 
 ## Core Features
@@ -76,3 +75,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 ## Support
 
 Create an issue in this repository for any questions or problems.
+

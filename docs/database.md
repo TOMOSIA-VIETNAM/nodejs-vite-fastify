@@ -9,53 +9,26 @@
 2. **Configure Connection**
    Edit `.env`:
 ```env
-DATABASE_URL=postgresql://user:pass@localhost:5432/your_db_name
+DB_HOST=host.docker.internal
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=fastify-boilerplate
+DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public"
+DATABASE_READER_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=reader"
+DATABASE_WRITER_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=writer"
 ```
 
-## Migrations
+## Migrations Commands
 
-1. **Create Migration**
-```bash
-pnpm typeorm migration:create src/migrations/CreateUsers
-```
+### Writer Database
+- Generate client: `pnpm db:writer:migration`
+- Run migrations: `pnpm db:writer:migrate`
 
-2. **Generate Migration**
-```bash
-pnpm typeorm migration:generate src/migrations/AddUserFields
-```
+### Reader Database
+- Generate client: `pnpm db:reader:migration`
+- Run migrations: `pnpm db:reader:migrate`
 
-3. **Run Migrations**
-```bash
-pnpm typeorm migration:run
-```
-
-## Entity Example
-```typescript
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  email: string;
-}
-```
-
-## Common Operations
-
-```typescript
-// Get repository
-const userRepo = dataSource.getRepository(User);
-
-// Create
-await userRepo.save({ email: "test@example.com" });
-
-// Find
-const user = await userRepo.findOneBy({ id: 1 });
-
-// Update
-await userRepo.update(1, { email: "new@example.com" });
-
-// Delete
-await userRepo.delete(1);
-```
+### Combined Commands
+- Generate both clients: `pnpm db:migration`
+- Run both migrations: `pnpm db:migrate`
