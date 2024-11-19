@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build --outDir build --ssr src/server.ts",
     "format": "prettier --config .prettierrc \"src/**/*.{js,json,ts,css,scss,vue,html,md}\" --write",
-    "start": "yarn build && node build/server.js",
+    "start": "yarn build && node build/server.mjs",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "coverage": "vitest --coverage"
