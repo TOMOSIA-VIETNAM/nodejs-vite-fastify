@@ -1,20 +1,41 @@
 import { FastifyInstance } from 'fastify'
 import { PostController } from './controllers/post.controller'
-import { createPostSchema, updatePostSchema } from './schemas/post.schema'
 
 export async function postRoutes(fastify: FastifyInstance) {
   const controller = new PostController()
 
-  fastify.post('/create', {
+  fastify.post('/', {
     schema: {
       body: {
         type: 'object',
-        required: ['title', 'content', 'authorId'],
+        required: ['title', 'authorId'],
         properties: {
           title: { type: 'string', minLength: 1, maxLength: 255 },
-          content: { type: 'string', minLength: 1 },
+          content: { type: 'string', nullable: true },
           published: { type: 'boolean', default: false },
           authorId: { type: 'number', minimum: 1 }
+        }
+      },
+      response: {
+        201: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+            title: { type: 'string' },
+            content: { type: 'string', nullable: true },
+            published: { type: 'boolean' },
+            authorId: { type: 'number' },
+            author: {
+              type: 'object',
+              properties: {
+                id: { type: 'number' },
+                email: { type: 'string' },
+                name: { type: 'string', nullable: true }
+              }
+            },
+            createdAt: { type: 'string' },
+            updatedAt: { type: 'string' }
+          }
         }
       }
     }
@@ -47,9 +68,11 @@ export async function postRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           title: { type: 'string', minLength: 1, maxLength: 255 },
-          content: { type: 'string', minLength: 1 },
-          published: { type: 'boolean' }
-        }
+          content: { type: 'string', nullable: true },
+          published: { type: 'boolean' },
+          authorId: { type: 'number', minimum: 1 }
+        },
+        additionalProperties: false
       }
     }
   }, controller.update.bind(controller))

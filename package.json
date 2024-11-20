@@ -11,7 +11,15 @@
     "start": "pnpm build && node build/server.mjs",
     "test": "vitest run",
     "test:ui": "vitest --ui",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "db:writer:migration": "prisma generate --schema=./prisma/writer/schema.prisma",
+    "db:writer:migrate": "prisma migrate dev --schema=./prisma/writer/schema.prisma",
+    "db:reader:migration": "prisma generate --schema=./prisma/reader/schema.prisma",
+    "db:reader:migrate": "prisma migrate dev --schema=./prisma/reader/schema.prisma",
+    "db:migration": "pnpm run db:writer:migration && pnpm run db:reader:migration",
+    "db:migrate": "pnpm run db:writer:migrate && pnpm run db:reader:migrate",
+    "db:studio": "prisma studio",
+    "db:push": "prisma db push"
   },
   "keywords": [
     "fastify",
