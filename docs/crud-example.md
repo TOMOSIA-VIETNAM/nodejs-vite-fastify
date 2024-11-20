@@ -1,27 +1,29 @@
 # CRUD Example: User Feature
 
-This guide demonstrates how to implement CRUD operations using a User feature example.
+## Schema Definition
 
-## Entity Setup
+Define model schema prisma
 
-Create `src/entities/user.entity.ts`:
+```prisma
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]
+}
 
-```typescript
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  email: string;
-
-  @Column()
-  name: string;
-
-  @Column({ default: true })
-  isActive: boolean;
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 ```
 
@@ -32,7 +34,7 @@ Create `src/modules/users/users.routes.ts`:
 ```typescript
 import { FastifyInstance } from 'fastify';
 import { createUser, getUsers, getUser, updateUser, deleteUser } from './users.controller';
-import { $ref } from './users.schema';  // We'll create this next
+import { $ref } from './users.schema';
 
 export async function userRoutes(app: FastifyInstance) {
   app.post('/', {
@@ -108,28 +110,40 @@ Create `src/modules/users/users.controller.ts`:
 
 ```typescript
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { dataSource } from '../../data-source';
-import { User } from '../../entities/user.entity';
-
-const userRepository = dataSource.getRepository(User);
+import { prisma } from '../../lib/prisma';
+import { Prisma } from '@prisma/client';
 
 export async function createUser(
-  request: FastifyRequest<{ Body: User }>,
+  request: FastifyRequest<{ Body: Prisma.UserCreateInput }>,
   reply: FastifyReply
 ) {
-  const user = await userRepository.save(request.body);
-  return reply.code(201).send(user);
+  try {
+    const user = await prisma.user.create({
+      data: request.body
+    });
+    return reply.code(201).send(user);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        return reply.code(409).send({ message: 'Email already exists' });
+      }
+    }
+    throw error;
+  }
 }
 
 export async function getUsers() {
-  return await userRepository.find();
+  return await prisma.user.findMany();
 }
 
 export async function getUser(
   request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) {
-  const user = await userRepository.findOneBy({ id: parseInt(request.params.id) });
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(request.params.id) }
+  });
+
   if (!user) {
     return reply.code(404).send({ message: 'User not found' });
   }
@@ -137,31 +151,56 @@ export async function getUser(
 }
 
 export async function updateUser(
-  request: FastifyRequest<{ Params: { id: string }; Body: Partial<User> }>,
+  request: FastifyRequest<{
+    Params: { id: string };
+    Body: Prisma.UserUpdateInput
+  }>,
   reply: FastifyReply
 ) {
-  const id = parseInt(request.params.id);
-  const result = await userRepository.update(id, request.body);
-
-  if (result.affected === 0) {
-    return reply.code(404).send({ message: 'User not found' });
+  try {
+    const user = await prisma.user.update({
+      where: { id: parseInt(request.params.id) },
+      data: request.body
+    });
+    return user;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        return reply.code(404).send({ message: 'User not found' });
+      }
+    }
+    throw error;
   }
-
-  return await userRepository.findOneBy({ id });
 }
 
 export async function deleteUser(
   request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) {
-  const result = await userRepository.delete(request.params.id);
-
-  if (result.affected === 0) {
-    return reply.code(404).send({ message: 'User not found' });
+  try {
+    await prisma.user.delete({
+      where: { id: parseInt(request.params.id) }
+    });
+    return reply.code(204).send();
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        return reply.code(404).send({ message: 'User not found' });
+      }
+    }
+    throw error;
   }
-
-  return reply.code(204).send();
 }
+```
+
+## Prisma Client Setup
+
+Tạo file `src/lib/prisma.ts`:
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+
+export const prisma = new PrismaClient();
 ```
 
 ## API Testing Commands

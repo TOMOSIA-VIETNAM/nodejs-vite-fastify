@@ -10,17 +10,80 @@ This starts the server with hot reload enabled.
 
 ## Project Structure
 ```
-src/
-├── config/         # Configuration files
-├── entities/       # TypeORM entities
-├── modules/        # Feature modules
-│   └── users/      # Example module
-│       ├── users.controller.ts
-│       ├── users.routes.ts
-│       └── users.schema.ts
-├── test/          # Test files
-├── app.ts         # App entry
-└── server.ts      # Server configuration
+.
+├── LICENCE
+├── README.md
+├── docs
+│   ├── api.md
+│   ├── architecture.md
+│   ├── contributing.md
+│   ├── crud-example.md
+│   ├── database.md
+│   ├── deployment.md
+│   ├── development.md
+│   ├── getting-started.md
+│   └── testing.md
+├── logs
+├── package.json
+├── pnpm-lock.yaml
+├── prisma
+│   ├── reader
+│   │   ├── migrations
+│   │   │   ├── 20241119175009_create_users
+│   │   │   │   └── migration.sql
+│   │   │   └── migration_lock.toml
+│   │   └── schema.prisma
+│   └── writer
+│       ├── migrations
+│       │   ├── 20241119174931_create_posts
+│       │   │   └── migration.sql
+│       │   └── migration_lock.toml
+│       └── schema.prisma
+├── src
+│   ├── app.ts
+│   ├── config
+│   │   ├── environment.ts
+│   │   └── swagger.ts
+│   ├── lib
+│   │   └── prisma.ts
+│   ├── logger.ts
+│   ├── modules
+│   │   ├── index.ts
+│   │   ├── post
+│   │   │   ├── controllers
+│   │   │   │   └── post.controller.ts
+│   │   │   ├── interfaces
+│   │   │   │   └── post.interface.ts
+│   │   │   ├── models
+│   │   │   │   └── post.model.ts
+│   │   │   ├── operations
+│   │   │   │   ├── create-post.operation.ts
+│   │   │   │   ├── delete-post.operation.ts
+│   │   │   │   ├── get-post.operation.ts
+│   │   │   │   ├── get-posts.operation.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── post.operations.ts
+│   │   │   │   └── update-post.operation.ts
+│   │   │   ├── routes.ts
+│   │   │   └── schemas
+│   │   │       └── post.schema.ts
+│   │   ├── setup-routes.ts
+│   ├── server.ts
+│   ├── shared
+│   │   ├── middlewares
+│   │   │   ├── auth.ts
+│   │   │   └── error-handler.ts
+│   │   ├── types
+│   │   │   ├── fastify.d.ts
+│   │   │   └── global.d.ts
+│   │   └── utils
+│   │       └── logger.ts
+│   └── test
+│       ├── app.test.ts
+│       └── fastify.ts
+├── tsconfig.json
+├── vite.config.ts
+└── vitest.config.ts
 ```
 
 ## Code Style & Linting

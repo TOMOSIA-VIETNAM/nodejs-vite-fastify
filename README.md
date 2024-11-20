@@ -18,6 +18,12 @@ pnpm install
 # Setup environment variables
 cp .env.example .env
 
+# Generate Prisma clients
+pnpm db:migration
+
+# Run database migrations
+pnpm db:migrate
+
 # Start development server
 pnpm dev
 ```
@@ -27,10 +33,39 @@ Visit `http://localhost:3000` to see your server running.
 
 - 🚀 **[Fastify](https://www.fastify.io/)** - High performance web framework
 - 📘 **TypeScript** - Type safety and better DX
-- 🗄️ **TypeORM** - Database ORM with migrations
-- 🔄 **Hot Reload** - Fast development with HMR
-- ✅ **Testing** - Ready-to-use test setup
-- 📝 **Logging** - Structured logging configuration
+- 🗄️ **Prisma** - Modern database ORM with migrations
+- 🔄 **Hot Reload** - Fast development with Vite HMR
+- ✅ **Testing** - Ready-to-use test setup with Vitest
+- 📝 **Logging** - Structured logging with Pino
+- 📚 **API Documentation** - Swagger/OpenAPI integration
+- 🔒 **Security** - Helmet, CORS, and rate limiting
+- 🎯 **Validation** - Request/Response validation with Zod
+
+## Available Scripts
+
+```bash
+# Development
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm start        # Start production server
+
+# Testing
+pnpm test         # Run tests
+pnpm test:ui      # Run tests with UI
+pnpm coverage     # Generate test coverage
+
+# Database
+pnpm db:writer:migration  # Generate writer database client
+pnpm db:writer:migrate    # Run writer database migrations
+pnpm db:reader:migration  # Generate reader database client
+pnpm db:reader:migrate    # Run reader database migrations
+pnpm db:migration        # Generate both database clients
+pnpm db:migrate         # Run all database migrations
+pnpm db:studio         # Open Prisma Studio
+
+# Code Quality
+pnpm format       # Format code with Prettier
+```
 
 ## Documentation
 
@@ -41,28 +76,6 @@ Visit `http://localhost:3000` to see your server running.
 - [Testing Guide](docs/testing.md) - How to write and run tests
 - [Deployment Guide](docs/deployment.md) - Production deployment instructions
 - [API Documentation](docs/api.md) - API endpoints and usage
-
-## Available Scripts
-
-```bash
-pnpm dev          # Start development server
-pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm test         # Run tests
-pnpm format       # Format code
-```
-
-## Project Structure
-
-```
-src/
-├── config/         # App configuration
-├── modules/        # Feature modules
-├── test/          # Test files
-├── app.ts         # App entry point
-├── server.ts      # Server setup
-└── logger.ts      # Logger setup
-```
 
 ## Contributing
 
