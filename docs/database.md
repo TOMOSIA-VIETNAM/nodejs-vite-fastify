@@ -1,5 +1,18 @@
 # Database Guide
 
+This project uses separate migrations for reader and writer databases.
+
+## Directory Structure
+```
+prisma/
+├── reader/           # Reader database (external)
+│   ├── schema.prisma
+│   └── migrations/
+├── writer/           # Writer database (internal)
+│   ├── schema.prisma
+│   └── migrations/
+```
+
 ## Setup
 
 1. **Install PostgreSQL**
@@ -21,14 +34,35 @@ DATABASE_WRITER_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT
 
 ## Migrations Commands
 
-### Writer Database
-- Generate client: `pnpm db:writer:migration`
-- Run migrations: `pnpm db:writer:migrate`
-
 ### Reader Database
-- Generate client: `pnpm db:reader:migration`
-- Run migrations: `pnpm db:reader:migrate`
+```bash
+# Generate Prisma Client
+pnpm db:reader:migration
+
+# Create/Apply Migrations
+pnpm db:reader:migrate
+
+# Open Prisma Studio
+pnpm db:reader:studio
+```
+
+### Writer Database
+```bash
+# Generate Prisma Client
+pnpm db:writer:migration
+
+# Create/Apply Migrations
+pnpm db:writer:migrate
+
+# Open Prisma Studio
+pnpm db:writer:studio
+```
 
 ### Combined Commands
-- Generate both clients: `pnpm db:migration`
-- Run both migrations: `pnpm db:migrate`
+```bash
+# Generate both clients
+pnpm db:migration
+
+# Run migrations for both databases
+pnpm db:migrate
+```
