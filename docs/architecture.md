@@ -43,7 +43,7 @@ The architecture follows a clear separation of concerns with distinct layers:
 
 ```typescript
 export class UserController {
-  async create(request: FastifyRequest<CreateUserRequest>, reply: FastifyReply) {
+  async create(request: FastifyRequest<CreateUserRequest>, reply:FastifyReply) {
     try {
       const user = await this.createUserOp.execute(request.body)
       return reply.code(201).send(user)
